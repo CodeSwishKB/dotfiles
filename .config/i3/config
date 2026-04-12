@@ -24,6 +24,11 @@ for_window [class="^.*"] border pixel 0
 # theme (dark mode)
 exec --no-startup-id /usr/libexec/gsd-xsettings
 
+# disable screen saver
+exec --no-startup-id xset s off
+exec --no-startup-id xset s noblank
+exec --no-startup-id xset -dpms
+
 # #numlock on
 # exec numlockx on
 
@@ -148,9 +153,9 @@ set $ws9 "9"
 set $ws10 "10"
 
 # switch to workspace feat autostart
-bindsym $mod+1 workspace number $ws1; exec alacritty
-bindsym $mod+2 workspace number $ws2; exec zen-browser
-bindsym $mod+3 workspace number $ws3;  
+bindsym $mod+1 workspace number $ws1; exec ghostty
+bindsym $mod+2 workspace number $ws2; exec vscodium 
+bindsym $mod+3 workspace number $ws3; exec brave 
 bindsym $mod+4 workspace number $ws4; 
 bindsym $mod+5 workspace number $ws5;
 bindsym $mod+6 workspace number $ws6;  

@@ -136,6 +136,86 @@ pomodoro () {
 alias wo="pomodoro 'work'"
 alias br="pomodoro 'break'"
 
+# Pomodoro timer for zsh / sh
+# Requires:
+# - https://github.com/caarlos0/timer
+# - https://github.com/charmbracelet/gum
+# - spd-say (speech-dispatcher)
+
+pom() {
+  local split="${POMO_SPLIT}"
+
+  if [ -z "$split" ]; then
+    split=$(gum choose "25/5" "50/10" "1hr/15min" "all done" \
+      --header "Choose a pomodoro split.")
+  fi
+
+  case "$split" in
+    "25/5")
+      work="25m"
+      break="5m"
+      ;;
+    "50/10")
+      work="50m"
+      break="10m"
+      ;;
+    "1hr/15min")
+      work="60m"
+      break="15m"
+      ;;
+    "all done")
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  timer "$work" && \
+    spd-say "Work timer is up. Take a break."
+
+  if gum confirm "Ready for a break?"; then
+    timer "$break" && \
+      spd-say "Break is over. Get back to work."
+  else
+    pom
+  fi
+}
+
+deepwork() {
+  local dwTime="${DEEPWORK_SPLIT}"
+
+  if [ -z "$dwTime" ]; then
+    dwTime=$(gum choose "1:30hr" "2hr" "3hr" "4hr" "all done" \
+      --header "Choose a deepwork time.")
+  fi
+
+  case "$dwTime" in
+    "1:30hr")
+      work="1.5h"
+      ;;
+    "2hr")
+      work="2h"
+      ;;
+    "3hr")
+      work="3h"
+      ;;
+    "4hr")
+      work="4h"
+      ;;
+    "all done")
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  timer "$work" && \
+    spd-say "Deep Work timer is up. Congrats master!."
+  deepwork
+}
+
 # fzf
 source /usr/share/doc/fzf/examples/key-bindings.zsh
 source /usr/share/doc/fzf/examples/completion.zsh
@@ -166,3 +246,9 @@ alias pr="pnpm run"
 
 alias sn="sudo shutdown now"
 alias reboot="sudo reboot now"
+alias unstow='stow --delete'
+alias update='sudo pacman -Syu'
+alias updatey='yay -Syu'
+
+export DATABASE_PASSWORD="<role_password>"
+export DATABASE_PASSWORD="<role_password>"
